@@ -1,5 +1,7 @@
 package com.ziyouling.good.goodserver.vo.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,10 +26,20 @@ public class MarketTradeTarget {
 	@ManyToOne
 	private TradeTarget target;
 	
+	
+	private String name;
+	
 	/**
 	 * 代码
 	 */
 	private String code;
+	
+	
+	/**
+	 * 上市日期
+	 */
+	private Date  openDate;
+	
 
 	public long getId() {
 		return id;
@@ -60,5 +72,22 @@ public class MarketTradeTarget {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getOpenDate() {
+		return openDate;
+	}
+
+	public void setOpenDate(Date openDate) {
+		this.openDate = openDate;
+	}
+
 	
 }

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
   *  交易标的，主要是企业
@@ -34,7 +35,7 @@ public class TradeTarget {
 	 * 简介
 	 */
 	@Column(length = 512)
-	private String desc;
+	private String description;
 	
 	/**
 	 * 官网
@@ -54,6 +55,7 @@ public class TradeTarget {
 	/**
 	 * 现任领导
 	 */
+	@ManyToOne
 	private Person leader;
 	
 	/**
@@ -101,13 +103,6 @@ public class TradeTarget {
 		this.name = name;
 	}
 
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
 
 	public String getWebsite() {
 		return website;
@@ -171,5 +166,13 @@ public class TradeTarget {
 
 	public void setDuraScore(double duraScore) {
 		this.duraScore = duraScore;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
