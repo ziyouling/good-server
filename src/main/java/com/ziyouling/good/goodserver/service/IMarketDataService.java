@@ -3,6 +3,7 @@ package com.ziyouling.good.goodserver.service;
 import java.util.List;
 
 import com.ziyouling.good.goodserver.vo.NameAndCode;
+import com.ziyouling.good.goodserver.vo.service.FinanceIndicator;
 
 /**
    * 市场数据
@@ -16,4 +17,12 @@ public interface IMarketDataService {
 	 * @return
 	 */
 	List<NameAndCode> loadAllTargets(String market);
+	
+	/**
+	 *      获取最近几年的财务指标，倒叙排列
+	 * @param market
+	 * @param code
+	 * @return
+	 */
+	List<FinanceIndicator> loadFinanceIndicator(String market, String code);
 }
