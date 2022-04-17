@@ -35,7 +35,7 @@ public class MarketTradeTargetService implements IMarketTradeTargetService{
 	private MinRoeTargetRepository minRoeTarget;
 	
 	@Override
-	public TypedRespond<Integer> updateAllMarketTradeTargets() {
+	public synchronized TypedRespond<Integer> updateAllMarketTradeTargets() {
 		TypedRespond<Integer> result = new TypedRespond<Integer> ();
 		Iterator<Market> it = markets.findAll().iterator();
 		int count = 0;
@@ -71,7 +71,7 @@ public class MarketTradeTargetService implements IMarketTradeTargetService{
 	}
 
 	@Override
-	public TypedRespond<Integer> updateAllMarketTradeTargetsRoeSat(int year) {
+	public synchronized TypedRespond<Integer> updateAllMarketTradeTargetsRoeSat(int year) {
 		TypedRespond<Integer> result = new TypedRespond<Integer> ();
 		Iterator<MarketTradeTarget> it = marketTradeTargets.findAll().iterator();
 		int total = 0;

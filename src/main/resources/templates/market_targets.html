@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" >
+        <title>市场交易标的</title>
+        <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/2.3.0/weui.min.css"/>
+        <link rel="stylesheet" href="/weuix.css"/>
+    </head>
+    <body>
+        <table class="weui-table " >
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>name</th>
+                    <th>code</th>
+                    <th>市场</th>
+                    <th>最小roe</th>
+                    <th>最大roe</th>
+                    <th>平均roe</th>
+                    <th>年限</th>
+                    <th>最近年份</th>
+                    <th>公司</th>
+                    <th>公司id</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${itemStat.index+1}"></td>
+                    <td th:text="${item.name}"></td>
+                    <td th:text="${item.code}"></td>
+                    <td th:text="${item.market}"></td>
+                    <td th:text="${item.roeLow}"></td>
+                    <td th:text="${item.roeHigh}"></td>
+                    <td th:text="${item.roeAvg}"></td>	
+                    <td th:text="${item.durationYear}"></td>	
+                    <td th:text="${#dates.format(item.endDate,'yyyy')}"></td>	
+                    <td th:text="${item.organizationName}"></td>	
+                    <td th:if="${item.organizationId ==0}">
+                        <a th:href="@{'/create_org_target?bind='+${item.id}}">创建</a>
+                    </td>
+                    <td th:unless="${item.organizationId ==0}" th:text="${item.organizationId}"></td>			        	 		
+                </tr>
+            </tbody>
+
+        </table>
+    </body>
+</html>
