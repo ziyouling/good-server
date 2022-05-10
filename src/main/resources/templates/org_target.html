@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" >
+        <title>企业</title>
+        <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/2.3.0/weui.min.css"/>
+        <!-- <link rel="stylesheet" href="/weuix.css"/> -->
+        <script src="https://unpkg.com/vue@3"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app" class="page">
+            <div class="weui-form">
+              <div class="weui-form__text-area">
+                <h2 class="weui-form__title">添加企业</h2>
+                <div class="weui-form__desc"></div>
+              </div>
+              <div class="weui-form__control-area">
+                <div class="weui-cells__group weui-cells__group_form weui-cells__group_form-primary">
+                  <div class="weui-cells__title">企业基本信息</div>
+                  <div class="weui-cells">
+                    <label  class="weui-cell weui-cell_active">
+                      <div class="weui-cell__hd"><span class="weui-label">简称</span></div>
+                      <div class="weui-cell__bd">
+                          <input id="bind_id" type="hidden" th:value="${bind_id}" />
+                          <input id="nickname" class="weui-input" placeholder="" th:value="${nickname}" v-model="nickname" />
+                      </div>
+                    </label>
+                    <label  class="weui-cell weui-cell_active">
+                      <div class="weui-cell__hd"><span class="weui-label">全称</span></div>
+                      <div class="weui-cell__bd">
+                          <input  class="weui-input" v-model="name"  />
+                      </div>
+                    </label>
+                    <label  class="weui-cell weui-cell_active">
+                        <div class="weui-cell__hd"><span class="weui-label">简介</span></div>
+                        <div class="weui-cell__bd">
+                            <textarea v-model="description" >
+                             </textarea>
+                        </div>
+                      </label>
+                      <label  class="weui-cell weui-cell_active">
+                        <div class="weui-cell__hd"><span class="weui-label">官网</span></div>
+                        <div class="weui-cell__bd">
+                            <input  class="weui-input" v-model="website"/>
+                        </div>
+                      </label>
+                      <label  class="weui-cell weui-cell_active">
+                        <div class="weui-cell__hd"><span class="weui-label">电话</span></div>
+                        <div class="weui-cell__bd">
+                            <input name="phone" class="weui-input" v-model="phone" />
+                        </div>
+                      </label>
+                      <label  class="weui-cell weui-cell_active">
+                        <div class="weui-cell__hd"><span class="weui-label">地址</span></div>
+                        <div class="weui-cell__bd">
+                            <input name="address" class="weui-input" v-model="address" />
+                        </div>
+                      </label>
+                      <label  class="weui-cell weui-cell_active">
+                        <div class="weui-cell__hd"><span class="weui-label">高管</span></div>
+                        <div class="weui-cell__bd">
+                            <input name="leader" class="weui-input" v-model="leader" />
+                        </div>
+                      </label>
+                  </div>
+                </div>
+             
+ 
+              </div>
+              <div class="weui-form__tips-area">
+                <p class="weui-form__tips">
+                  表单页提示，居中对齐
+                </p>
+              </div>
+              <div class="weui-form__opr-area">
+                <a role="button"   class="weui-btn weui-btn_primary " href="javascript:" id="showTooltips" @click="submit" >确定</a>
+              </div>
+              <div class="weui-form__extra-area">
+                <div class="weui-footer">
+                  <p class="weui-footer__links">
+                    <a href="javascript:" class="weui-footer__link">首页</a>
+                  </p>
+                  <p class="weui-footer__text">Copyright © 2008-2019 ziyouling.com</p>
+                </div>
+              </div>
+            </div>
+            <div role="alert" id="js_toast" style="display: none;">
+                <div class="weui-mask_transparent"></div>
+                <div class="weui-toast">
+                    <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+                    <p class="weui-toast__content">已完成</p>
+                </div>
+            </div>
+          </div>
+        </div>
+        <script>
+            var nickname =  document.getElementById("nickname").value;
+            var bind_id =  document.getElementById("bind_id").value;
+            Vue.createApp({
+              data() {
+                return {
+                    nickname: nickname,
+                    name:'',
+                    description:'234567',
+                    website:'',
+                    phone:'',
+                    address:'',
+                    leader:'',
+                }
+              },
+              methods:{
+                  submit()
+                  {
+					 var item = this.$data;
+					 createOrg(item);
+                  }
+              },
+            }).mount('#app')
+            
+            function createOrg(data)
+            {
+                axios.defaults.headers.post['Content-Type'] = 'application/json';
+            	axios.post('/api/org_target_new', data).then(
+            	function(resp)
+            	{
+                    var resp_data = resp.data;
+                    if(resp_data.code != 0)
+                    {
+                        alert(resp_data.msg);
+                        return;
+                    }
+                    bindFrom(resp_data.result);
+            	}).catch(
+            	function(error)
+            	{
+            	
+            	
+            	});
+            }
+
+            function bindFrom(targetId)
+            {
+                if(!bind_id)
+                {
+                    return;
+                }
+                const params = new URLSearchParams();
+                params.append('market', bind_id);
+                params.append('org', targetId);
+            	axios.post('/api/bind_target_market_org', params).then(
+            	function(resp)
+            	{
+                    var resp_data = resp.data;
+                    if(resp_data.code != 0)
+                    {
+                        alert(resp_data.msg);
+                        return;
+                    }
+                    alert("绑定成功!");
+            	}).catch(
+            	function(error)
+            	{
+            	
+            	
+            	});
+            }
+       
+        </script>
+    </body>
+</html>

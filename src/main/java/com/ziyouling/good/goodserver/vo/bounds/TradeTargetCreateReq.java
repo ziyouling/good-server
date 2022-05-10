@@ -1,5 +1,9 @@
 package com.ziyouling.good.goodserver.vo.bounds;
 
+import java.util.List;
+
+import com.ziyouling.good.goodserver.vo.entity.BusinessTag;
+
 public class TradeTargetCreateReq {
 	/**
 	 * 简称
@@ -39,6 +43,10 @@ public class TradeTargetCreateReq {
 	 */
 
 	private String leader;
+	
+	
+	private List<BusinessTag> tags;
+	
 
 	public String getNickname() {
 		return nickname;
@@ -94,6 +102,14 @@ public class TradeTargetCreateReq {
 
 	public void setLeader(String leader) {
 		this.leader = leader;
+	}
+
+	public List<BusinessTag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<BusinessTag> tags) {
+		this.tags = tags;
 	}
 	
 }

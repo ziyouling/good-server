@@ -1,5 +1,6 @@
 package com.ziyouling.good.goodserver.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ziyouling.good.goodserver.vo.NameAndCode;
@@ -25,4 +26,12 @@ public interface IMarketDataService {
 	 * @return
 	 */
 	List<FinanceIndicator> loadFinanceIndicator(String market, String code);
+	
+	/**
+	   * 上市时间
+	 * @param market
+	 * @param code
+	 * @return
+	 */
+	Date getListDate(String market, String code);
 }

@@ -69,6 +69,22 @@ public class MarketDataService implements IMarketDataService {
 		return resultList;
 	}
 	
+
+	@Override
+	public Date getListDate(String market, String code) {
+		RestTemplate template = new RestTemplate();
+		ResponseEntity<String> response = template.getForEntity(getCompanyInfoUrl(market, code), String.class);
+		String result = response.getBody();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		CompanyInfo info = gson.fromJson(result, CompanyInfo.class);
+		if(info == null ||info.getFxxg() == null || info.getFxxg().size() < 1)
+		{
+			return null;
+		}
+		return info.getFxxg().get(0).getLISTING_DATE();
+	}
+	
+	
 	private String  getTargetsUrl(int maxCount, String market)
 	{
 		String marketCode=market.toLowerCase().equals("sh") ? "m:1+t:2,m:1+t:23" : "m:0+t:6,m:0+t:80";
@@ -80,6 +96,12 @@ public class MarketDataService implements IMarketDataService {
 	private String  getFinanceIndicatorUrl(String market, String code)
 	{
 		String url = "https://emweb.eastmoney.com/PC_HSF10/NewFinanceAnalysis/ZYZBAjaxNew?type=1&code=" + market.toUpperCase()  + code;
+		return url;
+	}
+	
+	private String getCompanyInfoUrl(String market, String code)
+	{
+		String url = "https://emweb.eastmoney.com/PC_HSF10/CompanySurvey/PageAjax?code=" + market.toUpperCase()  + code;
 		return url;
 	}
 	
@@ -176,4 +198,92 @@ public class MarketDataService implements IMarketDataService {
 			REPORT_DATE = rEPORT_DATE;
 		}
 	}
+	
+	private static class CompanyInfo
+	{
+		//基本资料
+		private List<CompanyDesc> jbzl;
+		//发行相关
+		private List<CompanyMarketDesc> fxxg;
+		public List<CompanyDesc> getJbzl() {
+			return jbzl;
+		}
+		public void setJbzl(List<CompanyDesc> jbzl) {
+			this.jbzl = jbzl;
+		}
+		public List<CompanyMarketDesc> getFxxg() {
+			return fxxg;
+		}
+		public void setFxxg(List<CompanyMarketDesc> fxxg) {
+			this.fxxg = fxxg;
+		}
+		
+		
+	}
+	
+	private static class CompanyDesc
+	{
+		private String STR_NAMEA;
+		private String CHAIRMAN;
+		private String ADDRESS;
+		private String EM2016;
+		public String getSTR_NAMEA() {
+			return STR_NAMEA;
+		}
+		public void setSTR_NAMEA(String sTR_NAMEA) {
+			STR_NAMEA = sTR_NAMEA;
+		}
+		public String getCHAIRMAN() {
+			return CHAIRMAN;
+		}
+		public void setCHAIRMAN(String cHAIRMAN) {
+			CHAIRMAN = cHAIRMAN;
+		}
+		public String getADDRESS() {
+			return ADDRESS;
+		}
+		public void setADDRESS(String aDDRESS) {
+			ADDRESS = aDDRESS;
+		}
+		public String getEM2016() {
+			return EM2016;
+		}
+		public void setEM2016(String eM2016) {
+			EM2016 = eM2016;
+		}
+		
+	}
+	
+	private static class CompanyMarketDesc
+	{
+		private Date LISTING_DATE;
+		private Date FOUND_DATE;
+		private long TOTAL_FUNDS;
+		private long TOTAL_ISSUE_NUM;
+		public Date getLISTING_DATE() {
+			return LISTING_DATE;
+		}
+		public void setLISTING_DATE(Date lISTING_DATE) {
+			LISTING_DATE = lISTING_DATE;
+		}
+		public Date getFOUND_DATE() {
+			return FOUND_DATE;
+		}
+		public void setFOUND_DATE(Date fOUND_DATE) {
+			FOUND_DATE = fOUND_DATE;
+		}
+		public long getTOTAL_FUNDS() {
+			return TOTAL_FUNDS;
+		}
+		public void setTOTAL_FUNDS(long tOTAL_FUNDS) {
+			TOTAL_FUNDS = tOTAL_FUNDS;
+		}
+		public long getTOTAL_ISSUE_NUM() {
+			return TOTAL_ISSUE_NUM;
+		}
+		public void setTOTAL_ISSUE_NUM(long tOTAL_ISSUE_NUM) {
+			TOTAL_ISSUE_NUM = tOTAL_ISSUE_NUM;
+		}
+	}
+
 }

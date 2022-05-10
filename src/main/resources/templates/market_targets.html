@@ -38,7 +38,9 @@
                     <td th:if="${item.organizationId ==0}">
                         <a th:href="@{'/create_org_target?bind='+${item.id}}">创建</a>
                     </td>
-                    <td th:unless="${item.organizationId ==0}" th:text="${item.organizationId}"></td>			        	 		
+                    <td th:unless="${item.organizationId ==0}" >
+                     	<a th:href="@{'/get_org_target?id='+${item.organizationId}}" th:text="${item.organizationId}" ></a>
+                    </td>			        	 		
                 </tr>
             </tbody>
 

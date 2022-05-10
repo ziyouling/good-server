@@ -1,6 +1,7 @@
 package com.ziyouling.good.goodserver.service.impl;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -75,7 +76,8 @@ public class MarketTradeTargetService implements IMarketTradeTargetService{
 		TypedRespond<Integer> result = new TypedRespond<Integer> ();
 		Iterator<MarketTradeTarget> it = marketTradeTargets.findAll().iterator();
 		int total = 0;
-		int latestYear =Calendar.getInstance().get(Calendar.YEAR)-2;
+		int yearCurrent = Calendar.getInstance().get(Calendar.YEAR);
+		int latestYear =yearCurrent-2;
 		while(it.hasNext())
 		{
 			try
@@ -91,6 +93,16 @@ public class MarketTradeTargetService implements IMarketTradeTargetService{
 				//2,退市的忽略，最近没有财报的
 				FinanceIndicator latest = indicators.get(0);
 				if(latest.getReportYear() < latestYear )
+				{
+					continue;
+				}
+				//上市少于3年的。
+				Date listDate = marketData.getListDate(m.getMarket().getCodePrefix(), m.getCode());
+				if(listDate == null)
+				{
+					continue;
+				}
+				if(listDate.getYear() + 1900 > yearCurrent - 3)
 				{
 					continue;
 				}

@@ -3,7 +3,7 @@ package com.ziyouling.good.goodserver.vo.bounds;
 import java.util.Date;
 
 import com.ziyouling.good.goodserver.vo.entity.MinRoeTarget;
-import com.ziyouling.good.goodserver.vo.entity.TradeTarget;
+import com.ziyouling.good.goodserver.vo.entity.Company;
 
 public class MinRoeWebTarget {
 	
@@ -40,7 +40,7 @@ public class MinRoeWebTarget {
 		this.endDate = source.getEnd();
 		this.durationYear = source.getDurationYear();
 		
-		TradeTarget trade = source.getTarget().getTarget();;
+		Company trade = source.getTarget().getTarget();;
 		if(trade != null)
 		{
 			this.organizationName = trade.getName();

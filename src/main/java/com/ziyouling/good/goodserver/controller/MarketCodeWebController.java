@@ -35,6 +35,12 @@ public class MarketCodeWebController {
 		List<MinRoeWebTarget> resultList = new ArrayList<MinRoeWebTarget>();
 		for(MinRoeTarget item : list)
 		{
+			double roeHigh = item.getHighRoe();
+			double roeMin = item.getMinRoe();
+			if(roeHigh >= roeMin*3)
+			{
+				continue;
+			}
 			resultList.add(new MinRoeWebTarget(item));
 		}
 		model.addAttribute("items", resultList);

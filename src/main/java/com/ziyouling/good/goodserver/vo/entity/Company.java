@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
  */
 
 @Entity
-public class TradeTarget {
+public class Company {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long id;

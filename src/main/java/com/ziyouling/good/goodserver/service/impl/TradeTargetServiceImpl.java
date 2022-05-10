@@ -10,18 +10,18 @@ import org.springframework.util.StringUtils;
 
 import com.ziyouling.good.goodserver.repositories.MarketTradeTargetRepository;
 import com.ziyouling.good.goodserver.repositories.PersonRepository;
-import com.ziyouling.good.goodserver.repositories.TradeTargetRepository;
+import com.ziyouling.good.goodserver.repositories.CompanyRepository;
 import com.ziyouling.good.goodserver.service.ITradeTargetService;
 import com.ziyouling.good.goodserver.vo.bounds.TradeTargetCreateReq;
 import com.ziyouling.good.goodserver.vo.entity.MarketTradeTarget;
 import com.ziyouling.good.goodserver.vo.entity.Person;
-import com.ziyouling.good.goodserver.vo.entity.TradeTarget;
+import com.ziyouling.good.goodserver.vo.entity.Company;
 
 @Service
 public class TradeTargetServiceImpl implements ITradeTargetService {
 
 	@Autowired
-	private TradeTargetRepository targets;
+	private CompanyRepository targets;
 	
 	@Autowired
 	private PersonRepository persons;
@@ -32,40 +32,21 @@ public class TradeTargetServiceImpl implements ITradeTargetService {
 	
 	@Transactional
 	@Override
-	public synchronized TradeTarget create(TradeTargetCreateReq req, StringBuffer error) {
+	public synchronized Company create(TradeTargetCreateReq req, StringBuffer error) {
 		if(!StringUtils.hasText(req.getNickname()))
 		{
 			error.append("简称不能为空" );
 			return null;
 		}
-		TradeTarget target = targets.findByNickname(req.getNickname());
+		Company target = targets.findByNickname(req.getNickname());
 		if(target != null)
 		{
 			error.append("简称重复拉" );
 			return null;
 		}
-		target = new TradeTarget();
-		target.setNickname(req.getNickname());
-		target.setName(req.getName());
-		target.setDescription(req.getDescription());
-		target.setPhone(req.getPhone());
-		target.setAddress(req.getAddress());
-		target.setWebsite(req.getAddress());
-		
-		if(StringUtils.hasText(req.getLeader()))
-		{
-			String name = req.getLeader().trim();
-			
-			Person person = persons.findByName(name);
-			if(person == null)
-			{
-				person = new Person();
-				person.setName(name);;
-				persons.save(person);
-			}
-			target.setLeader(person);
-		}
+		target = new Company();
 		targets.save(target);
+		updateTarget(target, req, error);
 		return target;
 	}
 
@@ -77,7 +58,7 @@ public class TradeTargetServiceImpl implements ITradeTargetService {
 			error.append("找不到marketTargetid对应的标的");
 			return false;
 		}
-		Optional<TradeTarget> optional2 = targets.findById(org);
+		Optional<Company> optional2 = targets.findById(org);
 		if(!optional2.isPresent())
 		{
 			error.append("找不到对应的企业");
@@ -87,6 +68,38 @@ public class TradeTargetServiceImpl implements ITradeTargetService {
 		mtt.setTarget(optional2.get());
 		marketTradeTargets.save(mtt);
 		return true;
+	}
+	
+	
+	private void updateTarget(Company target, TradeTargetCreateReq req, StringBuffer error)
+	{
+		target.setNickname(req.getNickname());
+		target.setName(req.getName());
+		target.setDescription(req.getDescription());
+		target.setPhone(req.getPhone());
+		target.setAddress(req.getAddress());
+		target.setWebsite(req.getWebsite());
+		
+		if(StringUtils.hasText(req.getLeader()))
+		{
+//			String name = req.getLeader().trim();
+//			
+//			Person person = persons.findByName(name);
+//			if(person == null)
+//			{
+//				person = new Person();
+//				person.setName(name);;
+//				persons.save(person);
+//			}
+//			target.setLeader(person);
+			//TODO 建立高管库
+		}
+		//建立和行业标签的关联，
+		if(req.getTags() != null)
+		{
+			
+		}
+		targets.save(target);
 	}
 
 }

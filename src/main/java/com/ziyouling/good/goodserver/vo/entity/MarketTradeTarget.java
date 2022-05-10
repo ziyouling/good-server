@@ -24,7 +24,7 @@ public class MarketTradeTarget {
 	private Market market;
 	
 	@ManyToOne
-	private TradeTarget target;
+	private Company target;
 	
 	
 	private String name;
@@ -57,11 +57,11 @@ public class MarketTradeTarget {
 		this.market = market;
 	}
 
-	public TradeTarget getTarget() {
+	public Company getTarget() {
 		return target;
 	}
 
-	public void setTarget(TradeTarget target) {
+	public void setTarget(Company target) {
 		this.target = target;
 	}
 
