@@ -1,7 +1,7 @@
-package com.ziyouling.good.goodserver.controller;
+package com.ziyouling.good.goodserver.controller.api;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ziyouling.good.goodserver.repositories.MinRoeTargetRepository;
 import com.ziyouling.good.goodserver.service.IMarketDataService;
 import com.ziyouling.good.goodserver.service.IMarketTradeTargetService;
 import com.ziyouling.good.goodserver.vo.NameAndCode;
@@ -18,8 +19,8 @@ import com.ziyouling.good.goodserver.vo.entity.MinRoeTarget;
 import com.ziyouling.good.goodserver.vo.service.FinanceIndicator;
 
 @RestController
-@RequestMapping("/market")
-public class MarketCodeController {
+@RequestMapping("/api/market")
+public class MarketController {
 
 	@Autowired
 	private IMarketDataService marketData;
@@ -27,12 +28,15 @@ public class MarketCodeController {
 	@Autowired
 	private IMarketTradeTargetService marketTradeTargetService;
 	
+	@Autowired
+	private MinRoeTargetRepository minRoeTargets;
+	
 	/**
 	    * 获取所在市场的交易标的
 	 * @param market
 	 * @return
 	 */
-	@GetMapping("/load_targets")
+	@GetMapping("/load_codes")
 	private Respond loadTargets(String market)
 	{
 		Respond respond = new Respond();
@@ -41,7 +45,7 @@ public class MarketCodeController {
 	}
 	
 	
-	@GetMapping("/roes")
+	@GetMapping("/roe_history")
 	private Respond loadTargets(String market, String code)
 	{
 		Respond respond = new Respond();
@@ -50,20 +54,32 @@ public class MarketCodeController {
 	}
 	
 	
+	/**
+	   *     获取所有大于（等于）roe的标的
+	 * @param roe 百分数 15%，给定15
+	 * @return
+	 */
 	@GetMapping("/list_targets_min_roe")
 	private Respond listTargets(double roe)
 	{
+//		Respond respond = new Respond();
+//		int year = 3;
+//		List<MinRoeTarget> resultList = new ArrayList<MinRoeTarget>();
+//		
+//		//sz
+//		addMinRoeTargets(resultList, "sz", year, roe);
+//		//sh
+//		addMinRoeTargets(resultList, "sh", year, roe);
+//		System.out.println("list_targets_min_roe: " +roe + " size:" + resultList.size());
+//		respond.setResult(resultList);
+//		return respond;
 		Respond respond = new Respond();
-		int year = 3;
-		List<MinRoeTarget> resultList = new ArrayList<MinRoeTarget>();
-		
-		//sz
-		addMinRoeTargets(resultList, "sz", year, roe);
-		//sh
-		addMinRoeTargets(resultList, "sh", year, roe);
-		System.out.println("list_targets_min_roe: " +roe + " size:" + resultList.size());
-		respond.setResult(resultList);
+		Date reportDate = new Date();
+		reportDate.setYear(reportDate.getYear() -2);
+		List<MinRoeTarget> list = minRoeTargets.findAllByDurationYearGreaterThanAndEndAfterAndMinRoeGreaterThanEqualOrderByAvgRoeDesc(2, reportDate, roe);
+		respond.setResult(list);
 		return respond;
+		
 	}
 	
 	@GetMapping("/update_targets_roe_sat")

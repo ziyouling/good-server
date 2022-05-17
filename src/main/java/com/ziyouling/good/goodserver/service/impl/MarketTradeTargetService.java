@@ -102,6 +102,8 @@ public class MarketTradeTargetService implements IMarketTradeTargetService{
 				{
 					continue;
 				}
+				m.setOpenDate(listDate);
+				
 				if(listDate.getYear() + 1900 > yearCurrent - 3)
 				{
 					continue;
@@ -134,7 +136,8 @@ public class MarketTradeTargetService implements IMarketTradeTargetService{
 				target.setBegin(indicators.get(count-1).getReportDate());
 				target.setEnd(indicators.get(0).getReportDate());
 				target.setDurationYear(count);
-				
+				//TODO 看是否保存成功
+			//	marketTradeTargets.save(m);
 				minRoeTarget.save(target);
 				System.out.println("save min roe sat:" + m.getName() + "(" + m.getCode() + ")");
 				total++;
